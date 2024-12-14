@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Form with Login</title>
+
+    <style>
+        body {
+            background-color: #05c46b;
+            font-family: Verdana, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin-top: 20px;
+            color: #fff;
+        }
+
+        form {
+            background-color: #fff;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px 20px;
+            box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+
+        .form-control {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .form-control label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-control input,
+        .form-control select,
+        .form-control textarea {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 16px;
+            width: 95%;
+            box-sizing: border-box;
+        }
+
+        .form-control textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #05c46b;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #04a256;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 90%;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #04a256;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>EXPLORING THE PROGRAMMING MINDSET</h2>
+
+    <!-- Login Form -->
+    <form id="login-form">
+        <div class="form-control">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username" required />
+            <span class="error" id="username-error"></span>
+        </div>
+
+        <div class="form-control">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required />
+            <span class="error" id="password-error"></span>
+        </div>
+
+        <button type="button" onclick="showSurveyForm()">Login</button>
+    </form>
+
+    <!-- Survey Form -->
+    <form id="survey-form" style="display: none;" onsubmit="submitSurveyForm(event)">
+        <h2>Survey Form for Engineering Students</h2>
+
+        <div class="form-control">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter your name" required />
+        </div>
+
+        <div class="form-control">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required />
+        </div>
+
+        <div class="form-control">
+            <label for="age">Age</label>
+            <input type="number" id="age" placeholder="Enter your age" required min="10" max="100" />
+        </div>
+
+        <div class="form-control">
+            <label for="role">Which option best describes you?</label>
+            <select name="role" id="role" required>
+                <option value="">Select an option</option>
+                <option value="student">Student</option>
+                <option value="intern">Intern</option>
+                <option value="professional">Professional</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-control">
+           <b>  <label>Do you think that you have strong command on new technologies?</label> </b>
+            <label><input type="radio" name="recommend" value="yes" required> Yes</label>
+            <label><input type="radio" name="recommend" value="no"> No</label>
+            <label><input type="radio" name="recommend" value="maybe"> Maybe</label>
+        </div>
+
+        <div class="form-control">
+            <b>  <label>Languages and Frameworks known <small>(Check all that apply)</small></label> </b>
+            
+            <label><input type="checkbox" name="languages" value="cpp">C++</label>
+           
+            <label><input type="checkbox" name="languages" value="ruby">Ruby</label>
+            <label><input type="checkbox" name="languages" value="node.js">Node.js</label>
+            <label><input type="checkbox" name="languages" value="HTML">HTML</label>
+            <label><input type="checkbox" name="languages" value="CSS">CSS</label>
+            <label><input type="checkbox" name="languages" value="SQL"> SQL</label>
+            <label><input type="checkbox" name="languages" value="Perl">Perl</label>
+            <label><input type="checkbox" name="languages" value="java"> Java</label>
+
+            <label><input type="checkbox" name="languages" value="Rust">Rust</label>
+            <label><input type="checkbox" name="languages" value="python"> Python</label>
+            <label><input type="checkbox" name="languages" value="javascript"> JavaScript</label>
+            <label><input type="checkbox" name="languages" value="react"> React</label>
+        </div>
+
+        <div class="form-control">
+            <b> <label for="Purpose of Learning ">What is your primary reason for learning a programming language?
+            </label></b>
+            <select name="Purpose of Learning " id="Purpose of Learning " required>
+                <option value="">Select an option</option>
+                <option value="Career growth ">Career growth </option>
+                <option value="Academic requirements
+                ">Academic requirements
+                </option>
+                <option value="Personal interest
+
+                ">Personal interest
+
+                </option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-control">
+           <b>  <label for="comment">Any comments or suggestions</label></b>
+            <textarea id="comment" placeholder="Enter your comment here"></textarea>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Summary Table -->
+    <h2>Survey Summary</h2>
+    <table id="summary-table" style="display: none;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Role</th>
+                <th>Recommendation</th>
+                <th>Languages</th>
+                <th>Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        let formSubmissions = [];
+
+        function showSurveyForm() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            let isValid = true;
+
+            if (!username) {
+                document.getElementById('username-error').textContent = 'Username is required';
+                isValid = false;
+            } else {
+                document.getElementById('username-error').textContent = '';
+            }
+
+            if (!password) {
+                document.getElementById('password-error').textContent = 'Password is required';
+                isValid = false;
+            } else {
+                document.getElementById('password-error').textContent = '';
+            }
+
+            if (isValid) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('survey-form').style.display = 'block';
+            }
+        }
+
+        function submitSurveyForm(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const age = document.getElementById('age').value;
+            const role = document.getElementById('role').value;
+            const recommend = document.querySelector('input[name="recommend"]:checked').value;
+            const languages = Array.from(document.querySelectorAll('input[name="languages"]:checked')).map(cb => cb.value).join(', ');
+            const comment = document.getElementById('comment').value;
+
+            const submission = { name, email, age, role, recommend, languages, comment };
+            formSubmissions.push(submission);
+
+            updateSummaryTable();
+        }
+
+        function updateSummaryTable() {
+            const table = document.getElementById('summary-table');
+            const tbody = table.querySelector('tbody');
+
+            tbody.innerHTML = '';
+
+            formSubmissions.forEach(submission => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${submission.name}</td>
+                    <td>${submission.email}</td>
+                    <td>${submission.age}</td>
+                    <td>${submission.role}</td>
+                    <td>${submission.recommend}</td>
+                    <td>${submission.languages}</td>
+                    <td>${submission.comment}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            table.style.display = 'table';
+        }
+    </script>
+</body>
+
+</html>
