@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Survey Form with Login</title>
+    <title>Survey Form with Admin Panel</title>
 
     <style>
         body {
@@ -16,7 +16,7 @@
             padding: 0;
         }
 
-        h1 {
+        h1, h2 {
             margin-top: 20px;
             color: #fff;
         }
@@ -100,6 +100,28 @@
 
 <body>
     <h2>EXPLORING THE PROGRAMMING MINDSET</h2>
+   <!-- Registration Form -->
+    <form id="registration-form">
+        <h2>Registration</h2>
+
+        <div class="form-control">
+            <label for="reg-email">Email</label>
+            <input type="email" id="reg-email" placeholder="Enter your email" required />
+        </div>
+
+        <div class="form-control">
+            <label for="reg-username">Username</label>
+            <input type="text" id="reg-username" placeholder="Enter your username" required />
+        </div>
+
+        <div class="form-control">
+            <label for="reg-password">Password</label>
+            <input type="password" id="reg-password" placeholder="Enter your password" required />
+        </div>
+
+        <button type="button" onclick="handleRegistration()">Register</button>
+    </form>
+
 
     <!-- Login Form -->
     <form id="login-form">
@@ -115,7 +137,7 @@
             <span class="error" id="password-error"></span>
         </div>
 
-        <button type="button" onclick="showSurveyForm()">Login</button>
+        <button type="button" onclick="handleLogin()">Login</button>
     </form>
 
     <!-- Survey Form -->
@@ -149,58 +171,32 @@
         </div>
 
         <div class="form-control">
-           <b>  <label>Do you think that you have strong command on new technologies?</label> </b>
+            <label>Do you think that you have a strong command of new technologies?</label>
             <label><input type="radio" name="recommend" value="yes" required> Yes</label>
             <label><input type="radio" name="recommend" value="no"> No</label>
             <label><input type="radio" name="recommend" value="maybe"> Maybe</label>
         </div>
 
         <div class="form-control">
-            <b>  <label>Languages and Frameworks known <small>(Check all that apply)</small></label> </b>
-            
+            <label>Languages and Frameworks Known <small>(Check all that apply)</small></label>
             <label><input type="checkbox" name="languages" value="cpp">C++</label>
-           
             <label><input type="checkbox" name="languages" value="ruby">Ruby</label>
             <label><input type="checkbox" name="languages" value="node.js">Node.js</label>
             <label><input type="checkbox" name="languages" value="HTML">HTML</label>
             <label><input type="checkbox" name="languages" value="CSS">CSS</label>
             <label><input type="checkbox" name="languages" value="SQL"> SQL</label>
-            <label><input type="checkbox" name="languages" value="Perl">Perl</label>
-            <label><input type="checkbox" name="languages" value="java"> Java</label>
-
-            <label><input type="checkbox" name="languages" value="Rust">Rust</label>
-            <label><input type="checkbox" name="languages" value="python"> Python</label>
-            <label><input type="checkbox" name="languages" value="javascript"> JavaScript</label>
-            <label><input type="checkbox" name="languages" value="react"> React</label>
+            <label><input type="checkbox" name="languages" value="Java"> Java</label>
         </div>
 
         <div class="form-control">
-            <b> <label for="Purpose of Learning ">What is your primary reason for learning a programming language?
-            </label></b>
-            <select name="Purpose of Learning " id="Purpose of Learning " required>
-                <option value="">Select an option</option>
-                <option value="Career growth ">Career growth </option>
-                <option value="Academic requirements
-                ">Academic requirements
-                </option>
-                <option value="Personal interest
-
-                ">Personal interest
-
-                </option>
-                <option value="other">Other</option>
-            </select>
-        </div>
-
-        <div class="form-control">
-           <b>  <label for="comment">Any comments or suggestions</label></b>
+            <label for="comment">Any comments or suggestions</label>
             <textarea id="comment" placeholder="Enter your comment here"></textarea>
         </div>
 
         <button type="submit">Submit</button>
     </form>
 
-    <!-- Summary Table -->
+    <!-- Admin Table -->
     <h2>Survey Summary</h2>
     <table id="summary-table" style="display: none;">
         <thead>
@@ -219,73 +215,88 @@
     </table>
 
     <script>
-        let formSubmissions = [];
+     const ADMIN_CREDENTIALS = { username: "admin", password: "admin123" };
+let registeredUsers = [];
+let formSubmissions = [];
 
-        function showSurveyForm() {
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
+function handleRegistration() {
+    const email = document.getElementById('reg-email').value.trim();
+    const username = document.getElementById('reg-username').value.trim();
+    const password = document.getElementById('reg-password').value.trim();
 
-            let isValid = true;
+    if (email && username && password) {
+        registeredUsers.push({ email, username, password });
+        alert("Registration successful! You can now log in.");
+        
+        // Hide the registration form and show the login form after successful registration
+        document.getElementById('registration-form').style.display = 'none';
+        document.getElementById('login-form').style.display = 'block';
+    } else {
+        alert("Please fill out all fields.");
+    }
+}
 
-            if (!username) {
-                document.getElementById('username-error').textContent = 'Username is required';
-                isValid = false;
-            } else {
-                document.getElementById('username-error').textContent = '';
-            }
+function handleLogin() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const isAdmin = username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password;
 
-            if (!password) {
-                document.getElementById('password-error').textContent = 'Password is required';
-                isValid = false;
-            } else {
-                document.getElementById('password-error').textContent = '';
-            }
-
-            if (isValid) {
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('survey-form').style.display = 'block';
-            }
+    if (isAdmin) {
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('summary-table').style.display = 'table';
+        updateSummaryTable();
+    } else if (username && password) {
+        // Check if the user is registered
+        const user = registeredUsers.find(u => u.username === username && u.password === password);
+        if (user) {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('survey-form').style.display = 'block';
+        } else {
+            document.getElementById('username-error').textContent = "Invalid username or password.";
+            document.getElementById('password-error').textContent = "";
         }
+    } else {
+        document.getElementById('username-error').textContent = "Invalid username or password.";
+        document.getElementById('password-error').textContent = "";
+    }
+}
 
-        function submitSurveyForm(event) {
-            event.preventDefault();
+function submitSurveyForm(event) {
+    event.preventDefault();
 
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const age = document.getElementById('age').value;
-            const role = document.getElementById('role').value;
-            const recommend = document.querySelector('input[name="recommend"]:checked').value;
-            const languages = Array.from(document.querySelectorAll('input[name="languages"]:checked')).map(cb => cb.value).join(', ');
-            const comment = document.getElementById('comment').value;
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const age = document.getElementById('age').value;
+    const role = document.getElementById('role').value;
+    const recommend = document.querySelector('input[name="recommend"]:checked').value;
+    const languages = Array.from(document.querySelectorAll('input[name="languages"]:checked')).map(cb => cb.value).join(', ');
+    const comment = document.getElementById('comment').value;
 
-            const submission = { name, email, age, role, recommend, languages, comment };
-            formSubmissions.push(submission);
+    formSubmissions.push({ name, email, age, role, recommend, languages, comment });
 
-            updateSummaryTable();
-        }
+    document.getElementById('survey-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+}
 
-        function updateSummaryTable() {
-            const table = document.getElementById('summary-table');
-            const tbody = table.querySelector('tbody');
+function updateSummaryTable() {
+    const tbody = document.querySelector('#summary-table tbody');
+    tbody.innerHTML = '';
 
-            tbody.innerHTML = '';
+    formSubmissions.forEach(submission => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${submission.name}</td>
+            <td>${submission.email}</td>
+            <td>${submission.age}</td>
+            <td>${submission.role}</td>
+            <td>${submission.recommend}</td>
+            <td>${submission.languages}</td>
+            <td>${submission.comment}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
 
-            formSubmissions.forEach(submission => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${submission.name}</td>
-                    <td>${submission.email}</td>
-                    <td>${submission.age}</td>
-                    <td>${submission.role}</td>
-                    <td>${submission.recommend}</td>
-                    <td>${submission.languages}</td>
-                    <td>${submission.comment}</td>
-                `;
-                tbody.appendChild(row);
-            });
-
-            table.style.display = 'table';
-        }
     </script>
 </body>
 
